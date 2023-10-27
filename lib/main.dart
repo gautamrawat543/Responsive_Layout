@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//import something idk
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -29,6 +29,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController emailController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey();
+
+  String email = '';
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -43,17 +47,18 @@ class _MyHomePageState extends State<MyHomePage> {
           body: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Container(
-              height: containerHeight,
+              height: 900,
               width: containerWidth,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
-                    height: containerHeight * 0.07,
+                    height: 50,
                   ),
                   SvgPicture.asset('assets/profile.svg',
                       height: containerHeight * 0.24),
                   SizedBox(
-                    height: containerHeight * 0.06,
+                    height: 50,
                   ),
                   Text(
                     'Welcome Back!',
@@ -64,63 +69,69 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  SizedBox(
-                    height: containerHeight * 0.03,
-                  ),
-                  Flexible(
-                    child: Text(
-                      'Please Log into your existing account',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Raleway',
-                        fontWeight: FontWeight.w400,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: containerHeight * 0.035,
-                  ),
-                  Container(
-                    width: containerWidth * 0.9,
-                    child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      cursorColor: const Color.fromRGBO(0, 0, 0, 1),
-                      decoration: InputDecoration(
-                        hintText: 'Your Email',
-                        hintStyle: TextStyle(
+                  SizedBox(height: 30),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: containerWidth * 0.9,
+                      child: Text(
+                        'Please Log into your existing account',
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 16,
                           fontFamily: 'Raleway',
                           fontWeight: FontWeight.w400,
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return null;
-                        } else if (!value.endsWith('@gmail.com') ||
-                            !value.endsWith('.in')) {
-                          return 'Please Enter Valid Email';
-                        }
-                        return null;
-                      },
-                      // onChanged: (value) => email = value,
                     ),
                   ),
                   SizedBox(
-                    height: containerHeight * 0.02,
+                    height: 25,
+                  ),
+                  Container(
+                    width: containerWidth * 0.9,
+                    child: Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        cursorColor: const Color.fromRGBO(0, 0, 0, 1),
+                        decoration: InputDecoration(
+                          hintText: 'Your Email',
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.white),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter Email';
+                          } else if (!value.endsWith('@gmail.com') ||
+                              !value.endsWith('.in')) {
+                            return 'Please Enter Valid Email';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) => email = value,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
                   Container(
                     width: containerWidth * 0.9,
@@ -151,13 +162,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   SizedBox(
-                    height: containerHeight * 0.05,
+                    height: 35,
                   ),
                   Container(
                     width: containerWidth * 0.9,
-                    height: containerHeight * 0.07,
+                    height: 55,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _formKey.currentState!.validate();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2AC88F),
                         elevation: 3,
@@ -179,9 +192,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: containerHeight * 0.02,
                   ),
                 ],
               ),
